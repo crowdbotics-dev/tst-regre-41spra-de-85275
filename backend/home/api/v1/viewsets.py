@@ -1,3 +1,7 @@
+from rest_framework import viewsets
+from home.models import Main,Menu23
+from .serializers import MainSerializer,Menu23Serializer
+from rest_framework import authentication
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.authtoken.models import Token
@@ -28,3 +32,13 @@ class LoginViewSet(ViewSet):
         token, created = Token.objects.get_or_create(user=user)
         user_serializer = UserSerializer(user)
         return Response({"token": token.key, "user": user_serializer.data})
+
+class Menu23ViewSet(viewsets.ModelViewSet):
+    serializer_class = Menu23Serializer
+    authentication_classes = (authentication.SessionAuthentication, authentication.TokenAuthentication)
+    queryset = Menu23.objects.all()
+
+class MainViewSet(viewsets.ModelViewSet):
+    serializer_class = MainSerializer
+    authentication_classes = (authentication.SessionAuthentication, authentication.TokenAuthentication)
+    queryset = Main.objects.all()
